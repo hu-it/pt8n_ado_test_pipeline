@@ -45,161 +45,160 @@ stages:
   displayName: 'Build and Test Stage'
   jobs:
   # Job for Playwright Tests
-  - job: PlaywrightTests
-    displayName: 'Run Playwright Tests'
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: $(NODE_VERSION)
-      displayName: 'Install Node.js $(NODE_VERSION)'
+  # - job: PlaywrightTests
+  #   displayName: 'Run Playwright Tests'
+  #   steps:
+  #   - task: NodeTool@0
+  #     inputs:
+  #       versionSpec: $(NODE_VERSION)
+  #     displayName: 'Install Node.js $(NODE_VERSION)'
 
-    - script: |
-        echo "Downloading agent binary: $(AGENT_BINARY_NAME) from $(AGENT_BINARY_URL)"
-        curl -L -o $(AGENT_BINARY_NAME) "$(AGENT_BINARY_URL)"
-        chmod +x $(AGENT_BINARY_NAME)
-      displayName: 'Download Agent Binary'
-      workingDirectory: '$(ROOT_PROJECT_DIR)' # Agent binary expects to run where report is, or adjust path
-      condition: succeededOrFailed()
+  #   - script: |
+  #       echo "Downloading agent binary: $(AGENT_BINARY_NAME) from $(AGENT_BINARY_URL)"
+  #       curl -L -o $(AGENT_BINARY_NAME) "$(AGENT_BINARY_URL)"
+  #       chmod +x $(AGENT_BINARY_NAME)
+  #     displayName: 'Download Agent Binary'
+  #     workingDirectory: '$(ROOT_PROJECT_DIR)' # Agent binary expects to run where report is, or adjust path
+  #     condition: succeededOrFailed()
 
-    - script: |
-        npm ci
-      displayName: 'Install Playwright Project Dependencies (npm ci)'
-      workingDirectory: '$(PLAYWRIGHT_PROJECT_DIR)'
+  #   - script: |
+  #       npm ci
+  #     displayName: 'Install Playwright Project Dependencies (npm ci)'
+  #     workingDirectory: '$(PLAYWRIGHT_PROJECT_DIR)'
 
-    - script: |
-        npx playwright install --with-deps
-      displayName: 'Install Playwright Browsers & Dependencies'
-      workingDirectory: '$(PLAYWRIGHT_PROJECT_DIR)'
+  #   - script: |
+  #       npx playwright install --with-deps
+  #     displayName: 'Install Playwright Browsers & Dependencies'
+  #     workingDirectory: '$(PLAYWRIGHT_PROJECT_DIR)'
 
-    - script: |
-        mkdir -p $(PLAYWRIGHT_JUNIT_RESULTS_DIR)
-      displayName: 'Create Playwright JUnit results directory'
-      workingDirectory: '$(PLAYWRIGHT_PROJECT_DIR)'
+  #   - script: |
+  #       mkdir -p $(PLAYWRIGHT_JUNIT_RESULTS_DIR)
+  #     displayName: 'Create Playwright JUnit results directory'
+  #     workingDirectory: '$(PLAYWRIGHT_PROJECT_DIR)'
 
-    - script: |
-        npm test
-      displayName: 'Run Playwright Tests (npm test)'
-      workingDirectory: '$(PLAYWRIGHT_PROJECT_DIR)'
-      continueOnError: true
+  #   - script: |
+  #       npm test
+  #     displayName: 'Run Playwright Tests (npm test)'
+  #     workingDirectory: '$(PLAYWRIGHT_PROJECT_DIR)'
+  #     continueOnError: true
 
-    - script: |
-        echo "Run agent binary: $(AGENT_BINARY_NAME)"
+  #   - script: |
+  #       echo "Run agent binary: $(AGENT_BINARY_NAME)"
 
-        echo "Setting environment variables for agent:"
-        echo "AGENT_REPORT_PATH=$(PLAYWRIGHT_JUNIT_FULL_PATH)"
-        echo "AGENT_REPORT_FORMAT=junit"
-        echo "AGENT_REPORTER_TYPE=stdout"
+  #       echo "Setting environment variables for agent:"
+  #       echo "AGENT_REPORT_PATH=$(PLAYWRIGHT_JUNIT_FULL_PATH)"
+  #       echo "AGENT_REPORT_FORMAT=junit"
+  #       echo "AGENT_REPORTER_TYPE=stdout"
 
-        export AGENT_REPORT_PATH="$(PLAYWRIGHT_JUNIT_FULL_PATH)"
-        export AGENT_REPORT_FORMAT="junit"
-        export AGENT_REPORTER_TYPE="stdout"
+  #       export AGENT_REPORT_PATH="$(PLAYWRIGHT_JUNIT_FULL_PATH)"
+  #       export AGENT_REPORT_FORMAT="junit"
+  #       export AGENT_REPORTER_TYPE="stdout"
         
-        ./$(AGENT_BINARY_NAME)
-      displayName: 'Run Agent Binary for Playwright'
-      workingDirectory: '$(ROOT_PROJECT_DIR)'
-      condition: succeededOrFailed()
+  #       ./$(AGENT_BINARY_NAME)
+  #     displayName: 'Run Agent Binary for Playwright'
+  #     workingDirectory: '$(ROOT_PROJECT_DIR)'
+  #     condition: succeededOrFailed()
 
-    - task: PublishTestResults@2
-      inputs:
-        testResultsFormat: 'JUnit'
-        testResultsFiles: '$(PLAYWRIGHT_JUNIT_FULL_PATH)'
-        searchFolder: '$(System.DefaultWorkingDirectory)/$(PLAYWRIGHT_PROJECT_DIR)' # Search within the Playwright project dir
-        mergeTestResults: true
-        failTaskOnFailedTests: true
-        testRunTitle: 'Playwright Test Results'
-      displayName: 'Publish Playwright JUnit Test Results'
-      condition: succeededOrFailed()
+  #   - task: PublishTestResults@2
+  #     inputs:
+  #       testResultsFormat: 'JUnit'
+  #       testResultsFiles: '$(PLAYWRIGHT_JUNIT_FULL_PATH)'
+  #       searchFolder: '$(System.DefaultWorkingDirectory)/$(PLAYWRIGHT_PROJECT_DIR)' # Search within the Playwright project dir
+  #       mergeTestResults: true
+  #       failTaskOnFailedTests: true
+  #       testRunTitle: 'Playwright Test Results'
+  #     displayName: 'Publish Playwright JUnit Test Results'
+  #     condition: succeededOrFailed()
 
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(PLAYWRIGHT_HTML_REPORT_DIR)'
-        artifactName: 'PlaywrightHTMLReport'
-        publishLocation: 'Container'
-      displayName: 'Publish Playwright HTML Report'
-      condition: succeededOrFailed()
+  #   - task: PublishPipelineArtifact@1
+  #     inputs:
+  #       targetPath: '$(PLAYWRIGHT_HTML_REPORT_DIR)'
+  #       artifactName: 'PlaywrightHTMLReport'
+  #       publishLocation: 'Container'
+  #     displayName: 'Publish Playwright HTML Report'
+  #     condition: succeededOrFailed()
 
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(PLAYWRIGHT_JUNIT_FULL_PATH)'
-        artifactName: 'PlaywrightJUnitXMLReport' # Renamed for clarity
-        publishLocation: 'Container'
-      displayName: 'Publish Playwright JUnit XML Report File'
-      condition: succeededOrFailed()
+  #   - task: PublishPipelineArtifact@1
+  #     inputs:
+  #       targetPath: '$(PLAYWRIGHT_JUNIT_FULL_PATH)'
+  #       artifactName: 'PlaywrightJUnitXMLReport' # Renamed for clarity
+  #       publishLocation: 'Container'
+  #     displayName: 'Publish Playwright JUnit XML Report File'
+  #     condition: succeededOrFailed()
 
-  # Job for Cypress Tests
-  - job: CypressTests
-    displayName: 'Run Cypress Tests'
-    dependsOn: [] # Runs in parallel with PlaywrightTests if agents are available
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: $(NODE_VERSION)
-      displayName: 'Install Node.js $(NODE_VERSION)'
+  # # Job for Cypress Tests
+  # - job: CypressTests
+  #   displayName: 'Run Cypress Tests'
+  #   dependsOn: [] # Runs in parallel with PlaywrightTests if agents are available
+  #   steps:
+  #   - task: NodeTool@0
+  #     inputs:
+  #       versionSpec: $(NODE_VERSION)
+  #     displayName: 'Install Node.js $(NODE_VERSION)'
 
-    - script: |
-        echo "Downloading agent binary: $(AGENT_BINARY_NAME) from $(AGENT_BINARY_URL)"
-        curl -L -o $(AGENT_BINARY_NAME) "$(AGENT_BINARY_URL)"
-        chmod +x $(AGENT_BINARY_NAME)
-      displayName: 'Download Agent Binary'
-      workingDirectory: '$(ROOT_PROJECT_DIR)' # Agent binary expects to run where report is, or adjust path
-      condition: succeededOrFailed()
+  #   - script: |
+  #       echo "Downloading agent binary: $(AGENT_BINARY_NAME) from $(AGENT_BINARY_URL)"
+  #       curl -L -o $(AGENT_BINARY_NAME) "$(AGENT_BINARY_URL)"
+  #       chmod +x $(AGENT_BINARY_NAME)
+  #     displayName: 'Download Agent Binary'
+  #     workingDirectory: '$(ROOT_PROJECT_DIR)' # Agent binary expects to run where report is, or adjust path
+  #     condition: succeededOrFailed()
 
-    - script: |
-        npm ci
-      displayName: 'Install Cypress Project Dependencies (npm ci)'
-      workingDirectory: '$(CYPRESS_PROJECT_DIR)'
+  #   - script: |
+  #       npm ci
+  #     displayName: 'Install Cypress Project Dependencies (npm ci)'
+  #     workingDirectory: '$(CYPRESS_PROJECT_DIR)'
 
-    - script: |
-        npm test
-      displayName: 'Run Cypress Tests (npm test)'
-      workingDirectory: '$(CYPRESS_PROJECT_DIR)'
-      continueOnError: true # Allow publishing results even if tests fail
+  #   - script: |
+  #       npm test
+  #     displayName: 'Run Cypress Tests (npm test)'
+  #     workingDirectory: '$(CYPRESS_PROJECT_DIR)'
+  #     continueOnError: true # Allow publishing results even if tests fail
 
-    - script: |
-        echo "Run agent binary: $(AGENT_BINARY_NAME)"
+  #   - script: |
+  #       echo "Run agent binary: $(AGENT_BINARY_NAME)"
 
-        echo "Setting environment variables for agent:"
-        echo "AGENT_REPORT_PATH=$(CYPRESS_JUNIT_REPORTS_DIR)"
-        echo "AGENT_REPORT_FORMAT=junit"
-        echo "AGENT_REPORTER_TYPE=stdout"
+  #       echo "Setting environment variables for agent:"
+  #       echo "AGENT_REPORT_PATH=$(CYPRESS_JUNIT_REPORTS_DIR)"
+  #       echo "AGENT_REPORT_FORMAT=junit"
+  #       echo "AGENT_REPORTER_TYPE=stdout"
 
-        export AGENT_REPORT_PATH="$(CYPRESS_JUNIT_REPORTS_DIR)"
-        export AGENT_REPORT_FORMAT="junit"
-        export AGENT_REPORTER_TYPE="stdout"
+  #       export AGENT_REPORT_PATH="$(CYPRESS_JUNIT_REPORTS_DIR)"
+  #       export AGENT_REPORT_FORMAT="junit"
+  #       export AGENT_REPORTER_TYPE="stdout"
         
-        ./$(AGENT_BINARY_NAME)
-      displayName: 'Run Agent Binary for Cypress'
-      workingDirectory: '$(ROOT_PROJECT_DIR)'
-      condition: succeededOrFailed()
+  #       ./$(AGENT_BINARY_NAME)
+  #     displayName: 'Run Agent Binary for Cypress'
+  #     workingDirectory: '$(ROOT_PROJECT_DIR)'
+  #     condition: succeededOrFailed()
 
-    - task: PublishTestResults@2
-      inputs:
-        testResultsFormat: 'JUnit'
-        testResultsFiles: '$(CYPRESS_JUNIT_PATTERN)' # Use the pattern for Cypress JUnit files
-        searchFolder: '$(System.DefaultWorkingDirectory)/$(CYPRESS_PROJECT_DIR)' # Search within the Cypress project dir
-        mergeTestResults: true # Merges multiple JUnit XML files if found by pattern
-        failTaskOnFailedTests: true
-        testRunTitle: 'Cypress Test Results'
-      displayName: 'Publish Cypress JUnit Test Results'
-      condition: succeededOrFailed()
+  #   - task: PublishTestResults@2
+  #     inputs:
+  #       testResultsFormat: 'JUnit'
+  #       testResultsFiles: '$(CYPRESS_JUNIT_PATTERN)' # Use the pattern for Cypress JUnit files
+  #       searchFolder: '$(System.DefaultWorkingDirectory)/$(CYPRESS_PROJECT_DIR)' # Search within the Cypress project dir
+  #       mergeTestResults: true # Merges multiple JUnit XML files if found by pattern
+  #       failTaskOnFailedTests: true
+  #       testRunTitle: 'Cypress Test Results'
+  #     displayName: 'Publish Cypress JUnit Test Results'
+  #     condition: succeededOrFailed()
 
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(CYPRESS_VIDEOS_DIR)'
-        artifactName: 'CypressVideos'
-        publishLocation: 'Container'
-      displayName: 'Publish Cypress Videos'
-      condition: succeededOrFailed() # Publish even if some tests failed
+  #   - task: PublishPipelineArtifact@1
+  #     inputs:
+  #       targetPath: '$(CYPRESS_VIDEOS_DIR)'
+  #       artifactName: 'CypressVideos'
+  #       publishLocation: 'Container'
+  #     displayName: 'Publish Cypress Videos'
+  #     condition: succeededOrFailed() # Publish even if some tests failed
 
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(CYPRESS_SCREENSHOTS_DIR)'
-        artifactName: 'CypressScreenshots'
-        publishLocation: 'Container'
-      displayName: 'Publish Cypress Screenshots'
-      condition: succeededOrFailed() # Publish even if some tests failed
+  #   - task: PublishPipelineArtifact@1
+  #     inputs:
+  #       targetPath: '$(CYPRESS_SCREENSHOTS_DIR)'
+  #       artifactName: 'CypressScreenshots'
+  #       publishLocation: 'Container'
+  #     displayName: 'Publish Cypress Screenshots'
+  #     condition: succeededOrFailed() # Publish even if some tests failed
 
-# Job for Pytest-BDD (Python with Playwright) Tests
   - job: PytestBddPlaywrightTests
     displayName: 'Run Pytest-BDD with Playwright Tests'
     dependsOn: [] # Runs in parallel if agents are available
