@@ -161,7 +161,7 @@ stages:
         
         ./$(AGENT_BINARY_NAME)
       displayName: 'Download and Run Agent Binary for Cypress'
-      workingDirectory: '$(PLAYWRIGHT_PROJECT_DIR)' # Agent binary expects to run where report is, or adjust path
+      workingDirectory: '$(CYPRESS_PROJECT_DIR)' # Agent binary expects to run where report is, or adjust path
       condition: succeededOrFailed()
 
     - task: PublishTestResults@2
