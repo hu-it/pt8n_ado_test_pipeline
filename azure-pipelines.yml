@@ -240,6 +240,8 @@ stages:
         echo "AGENT_REPORT_PATH=$(PYTEST_BDD_ALLURE_RESULTS_DIR)"
         echo "AGENT_REPORT_FORMAT=allure"
         echo "AGENT_REPORTER_TYPE=stdout"
+        ls
+        pwd
 
         export AGENT_REPORT_PATH="$(PYTEST_BDD_ALLURE_RESULTS_DIR)"
         export AGENT_REPORT_FORMAT="allure"
