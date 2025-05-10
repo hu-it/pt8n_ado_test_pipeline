@@ -72,8 +72,7 @@ stages:
         # Make the downloaded binary executable
         chmod +x $(AGENT_BINARY_NAME)
 
-        export AGENT_REPORT_PATH=$(JUNIT_FULL_PATH) # Set the report path for the binary
-        ./$(AGENT_BINARY_NAME)
+        AGENT_REPORT_PATH="$(JUNIT_FULL_PATH)" ./$(AGENT_BINARY_NAME)
       displayName: 'Download and Prepare agent Binary'
       workingDirectory: '$(System.DefaultWorkingDirectory)' # Download to the root working directory
       condition: succeededOrFailed() # Run this step even if tests failed, to attempt processing if reports exist
