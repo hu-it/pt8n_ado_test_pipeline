@@ -23,7 +23,7 @@ variables:
   PLAYWRIGHT_HTML_REPORT_DIR: 'playwright-report' # Directory for the HTML report (must match playwright.config.ts outputFolder)
   JUNIT_RESULTS_DIR: 'test-results' # Directory where JUnit XML is saved
   JUNIT_RESULTS_FILE_NAME: 'junit-results.xml' # Name of the JUnit XML file
-  JUNIT_FULL_PATH: '$(JUNIT_RESULTS_DIR)/$(JUNIT_RESULTS_FILE_NAME)' # Full path to JUnit results file
+  JUNIT_FULL_PATH: '$(JUNIT_RESULTS_DIR)' # Full path to JUnit results file
 
   AGENT_BINARY_NAME: 'test-report-agent'
   AGENT_BINARY_URL: 'https://github.com/hu-it/pt8n_ado_t_test_agent_binary/releases/download/v0.0.1/test-report-agent'
@@ -72,7 +72,10 @@ stages:
         # Make the downloaded binary executable
         chmod +x $(AGENT_BINARY_NAME)
 
-        AGENT_REPORT_PATH="$(JUNIT_FULL_PATH)" ./$(AGENT_BINARY_NAME)
+        export AGENT_REPORT_PATH="$(JUNIT_FULL_PATH)"
+        export AGENT_REPORT_FORMAT="junit"
+        
+        ./$(AGENT_BINARY_NAME)
       displayName: 'Download and Prepare agent Binary'
       workingDirectory: '$(System.DefaultWorkingDirectory)' # Download to the root working directory
       condition: succeededOrFailed() # Run this step even if tests failed, to attempt processing if reports exist
