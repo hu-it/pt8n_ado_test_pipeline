@@ -19,7 +19,7 @@ variables:
   NODE_VERSION: '18.x'
 
   # Playwright specific variables
-  PLAYWRIGHT_PROJECT_DIR: '.' # Assuming Playwright is in the root or use specific folder
+  PLAYWRIGHT_PROJECT_DIR: './playwright-project' # Assuming Playwright is in the root or use specific folder
   PLAYWRIGHT_HTML_REPORT_DIR: '$(PLAYWRIGHT_PROJECT_DIR)/playwright-report'
   PLAYWRIGHT_JUNIT_RESULTS_DIR: '$(PLAYWRIGHT_PROJECT_DIR)/test-results' # Directory for Playwright JUnit XML
   PLAYWRIGHT_JUNIT_FULL_PATH: '$(PLAYWRIGHT_JUNIT_RESULTS_DIR)' # Full path to Playwright JUnit results file
@@ -29,7 +29,7 @@ variables:
   AGENT_BINARY_URL: 'https://github.com/hu-it/pt8n_ado_t_test_agent_binary/releases/download/v0.0.1/test-report-agent'
 
   # Cypress specific variables
-  CYPRESS_PROJECT_DIR: 'cypress-project' # Subdirectory for the Cypress project
+  CYPRESS_PROJECT_DIR: './cypress-project' # Subdirectory for the Cypress project
   CYPRESS_JUNIT_REPORTS_DIR: '$(CYPRESS_PROJECT_DIR)/results'
   CYPRESS_VIDEOS_DIR: '$(CYPRESS_PROJECT_DIR)/cypress/videos'
   CYPRESS_SCREENSHOTS_DIR: '$(CYPRESS_PROJECT_DIR)/cypress/screenshots'
