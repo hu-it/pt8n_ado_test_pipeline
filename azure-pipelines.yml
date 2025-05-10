@@ -228,7 +228,7 @@ stages:
       workingDirectory: '$(PYTEST_BDD_PROJECT_DIR)'
 
     - script: |
-        pytest --alluredir=$(PYTEST_BDD_ALLURE_RESULTS_DIR) --clean-alluredir
+        pytest --clean-alluredir
       displayName: 'Run Pytest-BDD Tests & Generate Allure Results'
       workingDirectory: '$(PYTEST_BDD_PROJECT_DIR)'
       continueOnError: true # Continue to generate report even if tests fail
