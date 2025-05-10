@@ -1,5 +1,19 @@
-trigger:
-- main # Or your primary branch, e.g., master, develop
+# azure-pipelines.yml
+
+trigger: # Continuous Integration (CI) trigger for pushes to specified branches
+- main
+
+pr: # Pull Request (PR) trigger configuration
+  branches:
+    include:
+    - main # Trigger pipeline for Pull Requests targeting the 'main' branch
+  # You can add path filters if needed:
+  # paths:
+  #   include:
+  #   - 'src/*' # Only run if files in the 'src' folder change
+  #   exclude:
+  #   - 'docs/*' # Don't run if only files in the 'docs' folder change
+  #   - '*.md'   # Don't run for changes to Markdown files
 
 pool:
   vmImage: 'ubuntu-latest' # Playwright works well on Ubuntu, Windows, and macOS
@@ -7,7 +21,15 @@ pool:
 variables:
   NODE_VERSION: '18.x' # Specify the Node.js version you are using
   PLAYWRIGHT_HTML_REPORT_DIR: 'playwright-report' # Directory for the HTML report (must match playwright.config.ts outputFolder)
-  JUNIT_RESULTS_FILE: 'test-results/junit-results.xml' # Path to JUnit results file (must match playwright.config.ts)
+  JUNIT_RESULTS_DIR: 'test-results' # Directory where JUnit XML is saved
+  JUNIT_RESULTS_FILE_NAME: 'junit-results.xml' # Name of the JUnit XML file
+  JUNIT_FULL_PATH: '$(JUNIT_RESULTS_DIR)/$(JUNIT_RESULTS_FILE_NAME)' # Full path to JUnit results file
+
+  # Variables for the fictitious prebuilt binary
+  AGENT_BINARY_NAME: 'test-report-agent'
+  # Replace this URL with the actual download URL of your fictitious binary
+  AGENT_BINARY_URL: 'https://github.com/hu-it/pt8n_ado_t_test_agent_binary/releases/download/v0.0.1/test-report-agent'
+
 
 stages:
 - stage: BuildAndTest
@@ -31,24 +53,54 @@ stages:
       displayName: 'Install Playwright Browsers & Dependencies'
       workingDirectory: '$(System.DefaultWorkingDirectory)'
 
+    # Ensure the directory for JUnit results exists before running tests
+    # This is good practice, though Playwright's reporter might create it.
+    - script: |
+        mkdir -p $(JUNIT_RESULTS_DIR)
+      displayName: 'Create JUnit results directory'
+      workingDirectory: '$(System.DefaultWorkingDirectory)'
+
     - script: |
         npm test
       displayName: 'Run Playwright Tests (npm test)'
       workingDirectory: '$(System.DefaultWorkingDirectory)'
       continueOnError: true # Set to true to ensure subsequent tasks like publishing results run even if tests fail
 
+    # --- Steps to download and use a fictitious prebuilt binary ---
+    - script: |
+        echo "Downloading fictitious binary: $(AGENT_BINARY_NAME) from $(AGENT_BINARY_URL)"
+        # Using curl to download the binary. -L follows redirects, -o specifies output file name.
+        curl -L -o $(AGENT_BINARY_NAME) "$(AGENT_BINARY_URL)"
+        
+        # Make the downloaded binary executable
+        chmod +x $(AGENT_BINARY_NAME)
+        
+        echo "Downloaded and made $(AGENT_BINARY_NAME) executable."
+      displayName: 'Download and Prepare Fictitious Binary'
+      workingDirectory: '$(System.DefaultWorkingDirectory)' # Download to the root working directory
+      condition: succeededOrFailed() # Run this step even if tests failed, to attempt processing if reports exist
+
+    - script: |
+        echo "Running fictitious binary: $(AGENT_BINARY_NAME)"
+        export AGENT_REPORT_PATH=$(JUNIT_FULL_PATH) # Set the report path for the binary
+        ./$(AGENT_BINARY_NAME)
+      displayName: 'Run Fictitious Binary on JUnit Report'
+      workingDirectory: '$(System.DefaultWorkingDirectory)'
+      condition: succeededOrFailed() # Ensure this runs if the download step ran
+    # --- End of fictitious binary steps ---
+
     # Task to publish JUnit test results (if you configured the JUnit reporter)
     # This allows Azure DevOps to display test results in the "Tests" tab of the pipeline run.
     - task: PublishTestResults@2
       inputs:
         testResultsFormat: 'JUnit'
-        testResultsFiles: '$(JUNIT_RESULTS_FILE)'
+        testResultsFiles: '$(JUNIT_FULL_PATH)' # Use the variable for the full path
         searchFolder: '$(System.DefaultWorkingDirectory)'
         mergeTestResults: true
         failTaskOnFailedTests: true # Fails the pipeline if any tests failed
         testRunTitle: 'Playwright Test Results'
-      displayName: 'Publish JUnit Test Results'
-      condition: succeededOrFailed() # Runs whether the tests passed or failed (but continueOnError was true for npm test)
+      displayName: 'Publish JUnit Test Results to ADO Tests Tab'
+      condition: succeededOrFailed() # Runs whether the tests passed or failed
 
     # Task to publish the Playwright HTML report as a pipeline artifact
     # This allows you to download and view the detailed HTML report.
@@ -58,4 +110,13 @@ stages:
         artifactName: 'PlaywrightHTMLReport'
         publishLocation: 'Container'
       displayName: 'Publish Playwright HTML Report'
+      condition: succeededOrFailed() # Runs whether the tests passed or failed
+
+    # TASK: Publish the raw JUnit XML file as a separate artifact
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(JUNIT_FULL_PATH)' # Path to the single JUnit XML file
+        artifactName: 'JUnitXMLReport' # Name of the artifact
+        publishLocation: 'Container'
+      displayName: 'Publish JUnit XML Report File'
       condition: succeededOrFailed() # Runs whether the tests passed or failed
