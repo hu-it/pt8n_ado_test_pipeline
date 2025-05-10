@@ -1,19 +1,61 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+- main # Or your primary branch, e.g., master, develop
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest' # Playwright works well on Ubuntu, Windows, and macOS
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  NODE_VERSION: '18.x' # Specify the Node.js version you are using
+  PLAYWRIGHT_HTML_REPORT_DIR: 'playwright-report' # Directory for the HTML report (must match playwright.config.ts outputFolder)
+  JUNIT_RESULTS_FILE: 'test-results/junit-results.xml' # Path to JUnit results file (must match playwright.config.ts)
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+- stage: BuildAndTest
+  displayName: 'Build and Test Stage'
+  jobs:
+  - job: TestExecution
+    displayName: 'Run Playwright Tests'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: $(NODE_VERSION)
+      displayName: 'Install Node.js $(NODE_VERSION)'
+
+    - script: |
+        npm ci
+      displayName: 'Install Project Dependencies (npm ci)'
+      workingDirectory: '$(System.DefaultWorkingDirectory)' # Ensure it runs in the project root
+
+    - script: |
+        npx playwright install --with-deps
+      displayName: 'Install Playwright Browsers & Dependencies'
+      workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+    - script: |
+        npm test
+      displayName: 'Run Playwright Tests (npm test)'
+      workingDirectory: '$(System.DefaultWorkingDirectory)'
+      continueOnError: true # Set to true to ensure subsequent tasks like publishing results run even if tests fail
+
+    # Task to publish JUnit test results (if you configured the JUnit reporter)
+    # This allows Azure DevOps to display test results in the "Tests" tab of the pipeline run.
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '$(JUNIT_RESULTS_FILE)'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        mergeTestResults: true
+        failTaskOnFailedTests: true # Fails the pipeline if any tests failed
+        testRunTitle: 'Playwright Test Results'
+      displayName: 'Publish JUnit Test Results'
+      condition: succeededOrFailed() # Runs whether the tests passed or failed (but continueOnError was true for npm test)
+
+    # Task to publish the Playwright HTML report as a pipeline artifact
+    # This allows you to download and view the detailed HTML report.
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(PLAYWRIGHT_HTML_REPORT_DIR)'
+        artifactName: 'PlaywrightHTMLReport'
+        publishLocation: 'Container'
+      displayName: 'Publish Playwright HTML Report'
+      condition: succeededOrFailed() # Runs whether the tests passed or failed

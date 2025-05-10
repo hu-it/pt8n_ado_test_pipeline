@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", // Or your desired ECMAScript target
+    "module": "commonjs", // Or "ESNext" if you configure package.json with "type": "module"
+    "rootDir": "./",
+    "outDir": "./dist", // Output directory for compiled JavaScript
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true, // Allows importing JSON modules
+    "moduleResolution": "node", // How modules get resolved
+    "sourceMap": true, // Generates corresponding '.map' file
+    "baseUrl": ".", // Base directory to resolve non-absolute module names
+    "paths": {
+      "@/*": ["./*"] // Example path alias
+    },
+    "lib": ["ESNext", "DOM"] // Standard libraries to include
+  },
+  "include": [
+    "tests/**/*.ts", // Include all .ts files in the tests directory
+    "playwright.config.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

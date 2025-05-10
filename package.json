@@ -1,0 +1,24 @@
+{
+  "name": "playwright-typescript-example",
+  "version": "1.0.0",
+  "description": "Playwright TypeScript Test Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --grep @ui",
+    "test:api": "npx playwright test --grep @api",
+    "report": "npx playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "testing"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "@types/node": "^20.12.12",
+    "typescript": "^5.4.5"
+  }
+}
