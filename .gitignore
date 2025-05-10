@@ -140,3 +140,7 @@ test-results
 videos
 screenshots
 results
+
+.venv
+__pycache__
+allure-results

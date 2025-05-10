@@ -11,7 +11,7 @@ module.exports = defineConfig({
     // but can be set as defaults here.
     reporter: 'junit',
     reporterOptions: {
-      mochaFile: 'results/my-test-output.xml',
+      mochaFile: 'results/my-test-output-[hash].xml',
       toConsole: false,
     },
 
