@@ -74,6 +74,7 @@ stages:
 
         export AGENT_REPORT_PATH="$(JUNIT_FULL_PATH)"
         export AGENT_REPORT_FORMAT="junit"
+        export AGENT_REPORTER_TYPE="stdout"
         
         ./$(AGENT_BINARY_NAME)
       displayName: 'Download and Prepare agent Binary'
