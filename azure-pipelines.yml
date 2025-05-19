@@ -23,6 +23,11 @@ variables:
 - name: PYTHON_VERSION
   value: '3.10'
 
+- name: AGENT_BINARY_NAME
+  value: 'test-report-agent'
+- name: AGENT_BINARY_URL
+  value: 'https://github.com/hu-it/pt8n_ado_t_test_agent_binary/releases/download/v0.0.1/test-report-agent'
+
 - name: ROOT_PROJECT_DIR
   value: '.'
 - name: PLAYWRIGHT_PROJECT_DIR
