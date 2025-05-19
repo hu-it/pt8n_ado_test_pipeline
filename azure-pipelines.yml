@@ -17,8 +17,10 @@ pool:
 
 variables:
 - group: test pipeline
-  NODE_VERSION: '18.x'
-  PYTHON_VERSION: '3.10'
+- name: NODE_VERSION
+  value: '18.x'
+- name: PYTHON_VERSION
+  value: '3.10'
 
   ROOT_PROJECT_DIR: '.' # Assuming Playwright is in the root or use specific folder
   # Playwright specific variables
