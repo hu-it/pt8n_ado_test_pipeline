@@ -102,10 +102,14 @@ stages:
         echo "AGENT_REPORT_PATH=$(PLAYWRIGHT_JUNIT_FULL_PATH)"
         echo "AGENT_REPORT_FORMAT=junit"
         echo "AGENT_REPORTER_TYPE=azuredevops"
+        echo "AGENT_AZDO_ORG=$(AGENT_AZDO_ORG)"
+        echo "AGENT_AZDO_PROJECT=$(AGENT_AZDO_PROJECT)"
 
         export AGENT_REPORT_PATH="$(PLAYWRIGHT_JUNIT_FULL_PATH)"
         export AGENT_REPORT_FORMAT="junit"
         export AGENT_REPORTER_TYPE="azuredevops"
+        export AGENT_AZDO_ORG="$(AGENT_AZDO_ORG)"
+        export AGENT_AZDO_PROJECT="$(AGENT_AZDO_PROJECT)"
         
         ./$(AGENT_BINARY_NAME)
       displayName: 'Run Agent Binary for Playwright'
@@ -175,10 +179,14 @@ stages:
         echo "AGENT_REPORT_PATH=$(CYPRESS_JUNIT_REPORTS_DIR)"
         echo "AGENT_REPORT_FORMAT=junit"
         echo "AGENT_REPORTER_TYPE=azuredevops"
+        echo "AGENT_AZDO_ORG=$(AGENT_AZDO_ORG)"
+        echo "AGENT_AZDO_PROJECT=$(AGENT_AZDO_PROJECT)"
 
         export AGENT_REPORT_PATH="$(CYPRESS_JUNIT_REPORTS_DIR)"
         export AGENT_REPORT_FORMAT="junit"
         export AGENT_REPORTER_TYPE="azuredevops"
+        export AGENT_AZDO_ORG="$(AGENT_AZDO_ORG)"
+        export AGENT_AZDO_PROJECT="$(AGENT_AZDO_PROJECT)"
         
         ./$(AGENT_BINARY_NAME)
       displayName: 'Run Agent Binary for Cypress'
@@ -253,10 +261,14 @@ stages:
         echo "AGENT_REPORT_PATH=$(PYTEST_BDD_ALLURE_RESULTS_DIR)"
         echo "AGENT_REPORT_FORMAT=allure"
         echo "AGENT_REPORTER_TYPE=azuredevops"
+        echo "AGENT_AZDO_ORG=$(AGENT_AZDO_ORG)"
+        echo "AGENT_AZDO_PROJECT=$(AGENT_AZDO_PROJECT)"
 
         export AGENT_REPORT_PATH="$(PYTEST_BDD_ALLURE_RESULTS_DIR)"
         export AGENT_REPORT_FORMAT="allure"
         export AGENT_REPORTER_TYPE="azuredevops"
+        export AGENT_AZDO_ORG="$(AGENT_AZDO_ORG)"
+        export AGENT_AZDO_PROJECT="$(AGENT_AZDO_PROJECT)"
         
         ./$(AGENT_BINARY_NAME)
       displayName: 'Run Agent Binary for Pytest-BDD with Playwright'
