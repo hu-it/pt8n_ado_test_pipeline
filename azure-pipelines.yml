@@ -16,6 +16,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+- group: test pipeline
   NODE_VERSION: '18.x'
   PYTHON_VERSION: '3.10'
 
