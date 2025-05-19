@@ -18,6 +18,11 @@ pool:
 variables:
 - group: test pipeline # Este bloque es para referenciar el grupo
 
+- name: NODE_VERSION
+  value: '18.x'
+- name: PYTHON_VERSION
+  value: '3.10'
+
 - name: ROOT_PROJECT_DIR
   value: '.'
 - name: PLAYWRIGHT_PROJECT_DIR
