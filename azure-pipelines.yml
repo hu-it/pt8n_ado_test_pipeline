@@ -110,6 +110,7 @@ stages:
         export AGENT_REPORTER_TYPE="azuredevops"
         export AGENT_AZDO_ORG="$(AGENT_AZDO_ORG)"
         export AGENT_AZDO_PROJECT="$(AGENT_AZDO_PROJECT)"
+        export AGENT_AZDO_PAT="$(AGENT_AZDO_PAT)"
         
         ./$(AGENT_BINARY_NAME)
       displayName: 'Run Agent Binary for Playwright'
@@ -187,6 +188,7 @@ stages:
         export AGENT_REPORTER_TYPE="azuredevops"
         export AGENT_AZDO_ORG="$(AGENT_AZDO_ORG)"
         export AGENT_AZDO_PROJECT="$(AGENT_AZDO_PROJECT)"
+        export AGENT_AZDO_PAT="$(AGENT_AZDO_PAT)"
         
         ./$(AGENT_BINARY_NAME)
       displayName: 'Run Agent Binary for Cypress'
@@ -269,6 +271,7 @@ stages:
         export AGENT_REPORTER_TYPE="azuredevops"
         export AGENT_AZDO_ORG="$(AGENT_AZDO_ORG)"
         export AGENT_AZDO_PROJECT="$(AGENT_AZDO_PROJECT)"
+        export AGENT_AZDO_PAT="$(AGENT_AZDO_PAT)"
         
         ./$(AGENT_BINARY_NAME)
       displayName: 'Run Agent Binary for Pytest-BDD with Playwright'
