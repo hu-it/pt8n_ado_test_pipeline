@@ -16,7 +16,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-- group: test pipeline # Este bloque es para referenciar el grupo
+# - group: test pipeline # Este bloque es para referenciar el grupo
 
 - name: NODE_VERSION
   value: '18.x'
