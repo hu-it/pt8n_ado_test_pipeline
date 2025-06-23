@@ -104,6 +104,8 @@ stages:
         echo "AGENT_REPORTER_TYPE=azuredevops"
         echo "AGENT_AZDO_ORG=$(AGENT_AZDO_ORG)"
         echo "AGENT_AZDO_PROJECT=$(AGENT_AZDO_PROJECT)"
+        echo "AGENT_AZDO_TEST_POINT_ID=$(AGENT_AZDO_TEST_POINT_ID)"
+        echo "AGENT_AZDO_TEST_ENV_ID=$(AGENT_AZDO_TEST_ENV_ID)"
 
         export AGENT_REPORT_PATH="$(PLAYWRIGHT_JUNIT_FULL_PATH)"
         export AGENT_REPORT_FORMAT="junit"
@@ -182,6 +184,8 @@ stages:
         echo "AGENT_REPORTER_TYPE=azuredevops"
         echo "AGENT_AZDO_ORG=$(AGENT_AZDO_ORG)"
         echo "AGENT_AZDO_PROJECT=$(AGENT_AZDO_PROJECT)"
+        echo "AGENT_AZDO_TEST_POINT_ID=$(AGENT_AZDO_TEST_POINT_ID)"
+        echo "AGENT_AZDO_TEST_ENV_ID=$(AGENT_AZDO_TEST_ENV_ID)"
 
         export AGENT_REPORT_PATH="$(CYPRESS_JUNIT_REPORTS_DIR)"
         export AGENT_REPORT_FORMAT="junit"
@@ -265,6 +269,8 @@ stages:
         echo "AGENT_REPORTER_TYPE=azuredevops"
         echo "AGENT_AZDO_ORG=$(AGENT_AZDO_ORG)"
         echo "AGENT_AZDO_PROJECT=$(AGENT_AZDO_PROJECT)"
+        echo "AGENT_AZDO_TEST_POINT_ID=$(AGENT_AZDO_TEST_POINT_ID)"
+        echo "AGENT_AZDO_TEST_ENV_ID=$(AGENT_AZDO_TEST_ENV_ID)"
 
         export AGENT_REPORT_PATH="$(PYTEST_BDD_ALLURE_RESULTS_DIR)"
         export AGENT_REPORT_FORMAT="allure"
