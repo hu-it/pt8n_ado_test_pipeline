@@ -6,7 +6,7 @@ describe('UI Tests for Playwright Dev Page', () => {
     cy.visit('https://playwright.dev/');
   });
 
-  it('should have the correct page title', { tags: ['@TM:1938'] }, () => {
+  it('should have the correct page title', { tags: ['TM:1938'] }, () => {
     // Expect a title "to include" a substring.
     cy.title().should('include', 'Playwright');
   });
