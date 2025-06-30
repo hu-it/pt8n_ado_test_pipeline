@@ -5,6 +5,7 @@ Feature: Playwright Dev Page UI Tests
   I want to interact with the Playwright developer page
   So that I can verify its basic UI functionalities
 
+  @TM:1938
   Scenario: Verify page title
     Given I am on the Playwright dev page
     Then the page title should contain "Playwright"

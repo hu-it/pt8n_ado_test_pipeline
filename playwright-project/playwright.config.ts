@@ -5,9 +5,32 @@ import path from 'path';
 // Define a name for the test run, used for the report.
 export const TEST_RUN_NAME = 'playwright-report';
 
+// Function to get test filters from environment variables
+const getTestFilters = () => {
+  const testCaseNames = process.env.AGENT_AZDO_TEST_CASES_NAMES;
+  const testCaseIds = process.env.AGENT_AZDO_TEST_CASES_IDS;
+  
+  const filters = [];
+  if (testCaseNames) {
+    filters.push(...testCaseNames.split(',').map(name => name.trim()));
+  }
+  if (testCaseIds) {
+    filters.push(...testCaseIds.split(',').map(id => `@${id.trim()}`))
+  }
+
+  if (filters.length > 0) {
+    return new RegExp(filters.join('|'));
+  }
+  
+  return undefined;
+};
+
 export default defineConfig({
   // Test directory: Location of your test files
   testDir: './tests',
+
+  // Filter tests based on environment variables
+  grep: getTestFilters(),
 
   // Maximum time one test can run for.
   timeout: 30 * 1000, // 30 seconds

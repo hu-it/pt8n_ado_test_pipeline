@@ -22,11 +22,11 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
       // For example, you can register tasks or modify the config.
-
+      require('cypress-grep/src/plugin')(config);
       // If you want to ensure reports directory exists or do other setup
       // const fs = require('fs');
       // const reportsDir = 'cypress/reports';
-      // if (!fs.existsSync(reportsDir)){
+      // if (!fs.existsSync(reportsDir)) {
       //   fs.mkdirSync(reportsDir, { recursive: true });
       // }
 
@@ -67,4 +67,8 @@ module.exports = defineConfig({
     // Enable video recording
     video: true,
   },
+  env: {
+    grepFilter: process.env.AGENT_AZDO_TEST_CASES_NAMES,
+    grepTags: process.env.AGENT_AZDO_TEST_CASES_IDS
+  }
 });

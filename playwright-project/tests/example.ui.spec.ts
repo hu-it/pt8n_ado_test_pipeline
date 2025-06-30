@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 // Test suite for UI tests
 test.describe('UI Tests @ui', () => {
   // Test case: Verify page title
-  test('should have the correct page title', async ({ page }) => {
+  test('should have the correct page title @TM:1938', async ({ page }) => {
     // Navigate to the Playwright website
     await page.goto('https://playwright.dev/');
 

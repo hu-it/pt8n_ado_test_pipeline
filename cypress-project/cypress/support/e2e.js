@@ -13,6 +13,7 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands';
+require('cypress-grep/src/support')();
 
 // Alternatively, you can use CommonJS syntax:
 // require('./commands')
