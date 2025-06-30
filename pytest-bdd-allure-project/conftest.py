@@ -44,11 +44,13 @@ def pytest_collection_modifyitems(config, items):
     else:
         selected_by_name = set(items)
 
-    # If both are provided, take the intersection. Otherwise, use the set from the single provided filter.
-    if test_case_ids and test_case_names:
-        selected_items = list(selected_by_id.intersection(selected_by_name))
-    elif test_case_ids:
-        selected_items = list(selected_by_id)
+    if test_case_ids:
+        if selected_by_id:
+            selected_items = list(selected_by_id)
+        elif test_case_names:
+            selected_items = list(selected_by_name)
+        else:
+            selected_items = []
     elif test_case_names:
         selected_items = list(selected_by_name)
     else:
