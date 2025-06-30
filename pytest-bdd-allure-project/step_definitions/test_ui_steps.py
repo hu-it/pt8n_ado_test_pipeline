@@ -2,6 +2,7 @@
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 import allure # For Allure attachments and steps
+import re # For regular expressions
 from playwright.sync_api import expect # Playwright's expect for assertions
 
 # Load scenarios from the feature file
@@ -35,7 +36,7 @@ def click_get_started_link(page):
 def click_main_search_button(page):
     """Clicks the main search button to open the search modal."""
     # This selector might need to be very specific to the website's structure
-    search_button = page.locator('button[class*="search"]').first # Adjust selector as needed
+    search_button = page.get_by_role("button", name="Search (Command+K)")
     expect(search_button).to_be_visible(timeout=10000)
     search_button.click()
     allure.attach(page.screenshot(type="png"), name="SearchModalOpened", attachment_type=allure.attachment_type.PNG)
@@ -53,17 +54,18 @@ def type_into_search_input(page, search_term):
 
 # Then Steps
 @then(parsers.parse('the page title should contain "{expected_title_part}"'))
-@allure.step('Then the page title should contain "{expected_title_part}"')
+@allure.step("Then the page title should contain \"{expected_title_part}\"")
 def verify_page_title(page, expected_title_part):
     """Verifies that the page title contains the expected text."""
-    expect(page).to_have_title(expected_title_part, timeout=10000) # Using Playwright's built-in assertion
+    expect(page).to_have_title(re.compile(expected_title_part), timeout=10000) # Using Playwright's built-in assertion
+
     allure.attach(f"Actual title: {page.title()}", name="PageTitleVerification")
 
 @then(parsers.parse('the URL should contain "{expected_url_part}"'))
 @allure.step('Then the URL should contain "{expected_url_part}"')
 def verify_url_contains(page, expected_url_part):
     """Verifies that the current URL contains the expected part."""
-    expect(page).to_have_url(f"**/*{expected_url_part}*", timeout=10000) # Using Playwright's built-in assertion with glob pattern
+    expect(page).to_have_url(re.compile(expected_url_part), timeout=10000) # Using Playwright's built-in assertion with glob pattern
     allure.attach(f"Actual URL: {page.url}", name="URLVerification")
 
 @then(parsers.parse('I should see search results containing "{expected_text}"'))

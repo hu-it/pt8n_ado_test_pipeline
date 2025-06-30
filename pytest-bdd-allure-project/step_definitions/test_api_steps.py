@@ -22,7 +22,7 @@ def api_context():
 def request_list_of_people(api_context):
     """Requests the list of people from SWAPI."""
     try:
-        response = requests.get(f"{SWAPI_BASE_URL}/people/")
+        response = requests.get(f"{SWAPI_BASE_URL}/people/", verify=False)
         response.raise_for_status() # Raise an exception for bad status codes
         api_context['response'] = response
     except requests.exceptions.RequestException as e:
@@ -38,7 +38,7 @@ def request_list_of_people(api_context):
 def request_person_details(api_context, person_id):
     """Requests details for a specific person ID from SWAPI."""
     try:
-        response = requests.get(f"{SWAPI_BASE_URL}/people/{person_id}/")
+        response = requests.get(f"{SWAPI_BASE_URL}/people/{person_id}/", verify=False)
         # No raise_for_status here, as we might expect 404 for one test case
         api_context['response'] = response
     except requests.exceptions.RequestException as e:
@@ -61,7 +61,7 @@ def request_non_existent_person(api_context, person_id):
 def search_people_by_name(api_context, search_name):
     """Searches for people by name in SWAPI."""
     try:
-        response = requests.get(f"{SWAPI_BASE_URL}/people/?search={search_name}")
+        response = requests.get(f"{SWAPI_BASE_URL}/people/?search={search_name}", verify=False)
         response.raise_for_status()
         api_context['response'] = response
     except requests.exceptions.RequestException as e:
