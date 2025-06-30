@@ -165,7 +165,7 @@ stages:
       condition: succeededOrFailed()
 
     - script: |
-        npm ci
+        npm ci --legacy-peer-deps
       displayName: 'Install Cypress Project Dependencies (npm ci)'
       workingDirectory: '$(CYPRESS_PROJECT_DIR)'
 
