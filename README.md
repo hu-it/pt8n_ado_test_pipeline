@@ -24,11 +24,22 @@ This repository contains four main components:
    2.1 First, create a test case in the PT8N plugin, capture the ID of the work item.
    2.2 Second, tag the test methods in your code repository with the ID capture in the step before.
 
+### Tagging examples
+
+- **Cypress**:
+  ```ruby
+  require 'redcarpet'
+  markdown = Redcarpet.new("Hello World!")
+  puts markdown.to_html
+  ```
+  
+- **Playwright**: An example Playwright with a test project test method referencing a PT8N test case
+- **PyTest**: An example PyTest test project with a test method referencing a PT8N test case
 
 ### Running the Application
 
-**Pipeline**: When you run the pipeline, the PT8N listener will be attentive and select the test cases tag. When the pipeline completes running, our app will automatically create a test run for the test case in the plugin with the proper outcome. And if the result is a failure, it will generate a Bug work item related to the test case run. 
-**PT8N**: When you're in the plugin, you have the option to perform an "Automated run". This option appears when you expand the test case menu. This option will trigger the pipeline where the test case is located and it will also create a test run, and depending on the outcome, it will create a Bug. 
+- **Pipeline**: When you run the pipeline, the PT8N listener will be attentive and select the test cases tag. When the pipeline completes running, our app will automatically create a test run for the test case in the plugin with the proper outcome. And if the result is a failure, it will generate a Bug work item related to the test case run. 
+- **PT8N**: When you're in the plugin, you have the option to perform an "Automated run". This option appears when you expand the test case menu. This option will trigger the pipeline where the test case is located and it will also create a test run, and depending on the outcome, it will create a Bug. 
 
 
 ### Support
