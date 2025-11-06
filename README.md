@@ -47,8 +47,11 @@ This repository contains four main components:
   ```
   
 - **PyTest**: 
-  ```Python
-
+  ```Gherkin
+  @TM:1938
+  Scenario: Verify page title
+    Given I am on the Playwright dev page
+    Then the page title should contain "Playwright"
   ```
 
 
