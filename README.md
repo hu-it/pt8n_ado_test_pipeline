@@ -21,7 +21,9 @@ This repository contains four main components:
 
 1. Copy the YAML file into your pipeline.
 2. Properly tag your test cases depending on the type of framework being used.
+
    2.1 First, create a test case in the PT8N plugin, capture the ID of the work item.
+
    2.2 Second, tag the test methods in your code repository with the ID capture in the step before.
 
 ### Tagging examples
