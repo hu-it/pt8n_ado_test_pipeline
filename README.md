@@ -27,14 +27,28 @@ This repository contains four main components:
 ### Tagging examples
 
 - **Cypress**:
-  ```ruby
-  require 'redcarpet'
-  markdown = Redcarpet.new("Hello World!")
-  puts markdown.to_html
+  ```TypeScript
+  it('should have the correct page title', { tags: ['TM:1938'] }, () => {
+  // Expect a title "to include" a substring.
+  cy.title().should('include', 'Playwright');
+  });
   ```
   
-- **Playwright**: An example Playwright with a test project test method referencing a PT8N test case
-- **PyTest**: An example PyTest test project with a test method referencing a PT8N test case
+- **Playwright**:
+  ```TypeScript
+  test('should have the correct page title @TM:1938', async ({ page }) => {
+    // Navigate to the Playwright website
+    await page.goto('https://playwright.dev/');
+    // Expect a title "to contain" a substring.
+    await expect(page).toHaveTitle(/Playwright/);
+  }
+  ```
+  
+- **PyTest**: 
+  ```Python
+
+  ```
+
 
 ### Running the Application
 
