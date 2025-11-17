@@ -9,7 +9,8 @@
     "test": "cypress run --reporter junit --reporter-options 'mochaFile=cypress/reports/junit-[hash].xml,toConsole=true'",
     "test:headed": "cypress run --headed",
     "report:merge": "echo 'JUnit reports are generated individually per spec file. Use a tool to merge if needed or configure Azure DevOps to pick up multiple files.'",
-    "clean:reports": "rm -rf cypress/reports/*"
+    "clean:reports": "rm -rf cypress/reports/*",
+    "generate:tests": "node generate-tests.js"
   },
   "keywords": [
     "cypress",

@@ -1,0 +1,73 @@
+name: Create Project Resource Zips
+
+on:
+  workflow_dispatch:
+    inputs:
+      include_node_modules:
+        description: 'Include node_modules in zip files'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      release_tag:
+        description: 'Release tag name (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  create-release-with-zips:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Create Cypress project zip
+        run: |
+          cd cypress-project
+          if [ "${{ github.event.inputs.include_node_modules }}" == "true" ]; then
+            zip -r ../cypress-project-resources.zip . -x "*.git*" "test-results/*" "results/*" "cypress/screenshots/*" "cypress/videos/*"
+          else
+            zip -r ../cypress-project-resources.zip . -x "*.git*" "node_modules/*" "test-results/*" "results/*" "cypress/screenshots/*" "cypress/videos/*"
+          fi
+          cd ..
+
+      - name: Create Playwright project zip
+        run: |
+          cd playwright-project
+          if [ "${{ github.event.inputs.include_node_modules }}" == "true" ]; then
+            zip -r ../playwright-project-resources.zip . -x "*.git*" "test-results/*" "playwright-report/*"
+          else
+            zip -r ../playwright-project-resources.zip . -x "*.git*" "node_modules/*" "test-results/*" "playwright-report/*"
+          fi
+          cd ..
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.release_tag }}
+          name: Test Resources ${{ github.event.inputs.release_tag }}
+          body: |
+            ## Test Project Resources
+
+            This release contains zipped resources for:
+            - Cypress Project
+            - Playwright Project
+
+            **Node modules included:** ${{ github.event.inputs.include_node_modules }}
+          files: |
+            cypress-project-resources.zip
+            playwright-project-resources.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
