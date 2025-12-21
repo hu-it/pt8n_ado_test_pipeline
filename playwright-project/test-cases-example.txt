@@ -1,3 +1,0 @@
-1938,Verify page title displays correctly
-1939,Test user login functionality
-1940,Validate search results are displayed

@@ -10,7 +10,8 @@
     "test:headed": "cypress run --headed",
     "report:merge": "echo 'JUnit reports are generated individually per spec file. Use a tool to merge if needed or configure Azure DevOps to pick up multiple files.'",
     "clean:reports": "rm -rf cypress/reports/*",
-    "generate:tests": "node generate-tests.js"
+    "generate:tests": "node generate-tests-and-zip.js",
+    "zip:project": "node create-project-zip.js"
   },
   "keywords": [
     "cypress",
@@ -27,6 +28,7 @@
     "mocha-junit-reporter": "^2.2.1"
   },
   "dependencies": {
-    "cypress-grep": "^3.0.4"
+    "cypress-grep": "^3.0.4",
+    "glob": "^13.0.0"
   }
 }

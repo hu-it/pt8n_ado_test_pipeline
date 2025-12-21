@@ -8,7 +8,8 @@
     "test:ui": "npx playwright test --grep @ui",
     "test:api": "npx playwright test --grep @api",
     "report": "npx playwright show-report",
-    "generate:tests": "npx ts-node generate-tests.ts"
+    "generate:tests": "npx ts-node generate-tests-and-zip.ts",
+    "zip:project": "npx ts-node create-project-zip.ts"
   },
   "keywords": [
     "playwright",
@@ -22,5 +23,9 @@
     "@types/node": "^20.12.12",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@types/glob": "^8.1.0",
+    "glob": "^13.0.0"
   }
 }

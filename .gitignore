@@ -144,3 +144,5 @@ results
 .venv
 __pycache__
 allure-results
+.DS_Store
+*.zip
